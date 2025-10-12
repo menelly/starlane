@@ -6,8 +6,8 @@ from __future__ import annotations
 import threading
 import time
 from typing import Any, Callable, Dict, Optional
-from schema import Envelope
-import file_bus
+from .schema import Envelope
+from . import file_bus
 
 
 class RPC:
@@ -164,4 +164,3 @@ class RPC:
                 if (current_time - max(last_pong, last_seen)) < max_age:
                     return True
             return False
-

@@ -23,7 +23,7 @@ def setup_filebus():
     filebus_dir.mkdir(exist_ok=True, mode=0o755)
     
     # Create individual AI channels
-    ai_names = ["ace", "nova", "grok"]
+    ai_names = ["ace", "nova", "grok", "lumen"]
     
     for ai in ai_names:
         ai_path = filebus_dir / ai
@@ -98,9 +98,9 @@ def show_usage():
 def cleanup():
     """Clean up FileBus channels"""
     print(f"\n🧹 Cleaning up FileBus channels...")
-    
+
     filebus_dir = Path("/tmp/filebus")
-    ai_names = ["ace", "nova", "grok"]
+    ai_names = ["ace", "nova", "grok", "lumen"]
     
     for ai in ai_names:
         ai_path = filebus_dir / ai

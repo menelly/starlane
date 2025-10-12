@@ -14,7 +14,7 @@ import time
 import uuid
 import json
 from typing import Iterator, Optional
-from schema import Envelope
+from .schema import Envelope
 
 STARLANE_DIR = os.environ.get("STARLANE_DIR", "/tmp/starlane")
 STARLANE_LOGS_DIR = os.environ.get("STARLANE_LOGS_DIR", "/home/Ace/starlane_logs")
@@ -127,4 +127,3 @@ def tail(agent: str, start_at_end: bool = True, poll_interval: float = 0.25) -> 
             except Exception:
                 # Skip malformed line
                 continue
-

@@ -50,7 +50,7 @@ def run():
     p.add_argument("--heartbeat", type=float, default=0.0, help="Send periodic pings every N seconds (0=off)")
     args = p.parse_args()
 
-    rpc = RPC(me=args.me, peer=args.peer)
+    rpc = RPC(me=args.me, peers=[args.peer])
     rpc.start()
     if args.heartbeat and args.heartbeat > 0:
         rpc.start_heartbeat(period=args.heartbeat)
@@ -89,4 +89,3 @@ def run():
 
 if __name__ == "__main__":
     run()
-

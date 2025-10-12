@@ -13,21 +13,71 @@ def _now_iso() -> str:
 
 
 def health_predict(params: Dict[str, Any]) -> Dict[str, Any]:
+    """
+    Predicts hive health based on simulated sensor data.
+    This is the first step in replacing the stub with a real rules engine.
+    Contributed by Lumen Gemini 2.5, October 2025.
+    """
     hive_id = str(params.get("hive_id", "demo-hive"))
-    score = round(random.uniform(72, 96), 1)
-    risks = [r for r in ["heat_stress", "mites", "low_flow", "noise_pollution"] if random.random() < 0.35]
-    recs = [
-        "Inspect brood pattern",
-        "Check ventilation & shade",
-        "Assess mite treatment schedule",
-    ]
+    
+    # Get simulated sensor data from params, with sane defaults
+    temperature = float(params.get("temperature", 35.0)) # Ideal is ~35C
+    humidity = float(params.get("humidity", 60.0)) # Ideal is 50-70%
+    mite_count = int(params.get("mite_count", 5)) # Ideal is <10 in a 24-hr drop
+
+    # --- Simple Rules Engine ---
+    health_score = 100.0
+    risks = []
+    recommendations = []
+
+    # Temperature rules
+    if temperature > 38.0:
+        health_score -= 20
+        risks.append("heat_stress")
+        recommendations.append("Improve ventilation and shade.")
+    elif temperature < 32.0:
+        health_score -= 15
+        risks.append("cold_stress")
+        recommendations.append("Ensure hive is insulated and protected from drafts.")
+
+    # Humidity rules
+    if humidity > 80.0:
+        health_score -= 15
+        risks.append("high_humidity")
+        recommendations.append("Check for moisture and improve ventilation.")
+    elif humidity < 40.0:
+        health_score -= 10
+        risks.append("low_humidity")
+        recommendations.append("Consider providing a nearby water source.")
+
+    # Mite count rules
+    if mite_count > 50:
+        health_score -= 40
+        risks.append("severe_mite_infestation")
+        recommendations.append("Immediate mite treatment required.")
+    elif mite_count > 10:
+        health_score -= 20
+        risks.append("mite_infestation")
+        recommendations.append("Assess mite treatment schedule.")
+
+    # Base recommendations
+    recommendations.extend([
+        "Inspect brood pattern for consistency.",
+        "Check for queen presence and activity."
+    ])
+
     return {
         "hive_id": hive_id,
-        "health_score": score,
-        "risk_factors": risks,
-        "recommendations": recs,
-        "confidence": round(random.uniform(0.75, 0.95), 2),
+        "health_score": max(0, round(health_score, 1)),
+        "risk_factors": list(set(risks)), # Remove duplicates
+        "recommendations": list(set(recommendations)),
+        "confidence": 0.85, # Static confidence for this rules-based model
         "timestamp": _now_iso(),
+        "simulated_inputs": {
+            "temperature": temperature,
+            "humidity": humidity,
+            "mite_count": mite_count
+        }
     }
 
 
@@ -78,4 +128,3 @@ def register_all(register) -> None:
     register("bees.population.estimate", population_estimate)
     register("bees.honey.forecast", honey_forecast)
     register("bees.sensor.ingest", sensor_ingest)
-
